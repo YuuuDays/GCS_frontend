@@ -40,7 +40,8 @@ function Profile() {
                     const data = await response.json();
                     setUserInfo(data);
                     setFormData({
-                        notificationTime: data.notificationTime || '',
+                        // 旧仕様(15分単位)で登録された"21:30"等は"21:00"として表示する
+                        notificationTime: data.notificationTime ? `${data.notificationTime.split(':')[0]}:00` : '',
                         gitName: data.gitName || '',
                         notificationEmail: data.notificationEmail || ''
                     });
@@ -58,9 +59,9 @@ function Profile() {
         const { name, value } = e.target;
 
         if (name === "notificationTime") {
-            const [hours, minutes] = value.split(':').map(Number);
-            const roundedMinutes = Math.floor(minutes / 15) * 15;
-            const newTime = `${String(hours).padStart(2, '0')}:${String(roundedMinutes).padStart(2, '0')}`;
+            // 通知は1時間単位のため、分は常に00に切り捨てる
+            const [hours] = value.split(':').map(Number);
+            const newTime = `${String(hours).padStart(2, '0')}:00`;
             setFormData({
                 ...formData,
                 [name]: newTime
@@ -176,7 +177,7 @@ function Profile() {
                                             value={formData.notificationTime.split(':')[1]}
                                             onChange={handleTimeChange}
                                         >
-                                            {['00', '15', '30', '45'].map(minute => (
+                                            {['00'].map(minute => (
                                                 <option key={minute} value={minute}>
                                                     {minute}
                                                 </option>
