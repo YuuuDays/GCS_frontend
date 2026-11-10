@@ -42,7 +42,7 @@ function Register() {
     const [formData, setFormData] = useState({
         notificationEmail: user?.email || '',
         gitName: '',
-        time: '21:30'
+        time: '21:00'
     });
 
     const [selectedEmailOption, setSelectedEmailOption] = useState('google');
@@ -324,7 +324,7 @@ function Register() {
                                         <NativeSelectRoot style={{ width: '80px' }}>
                                             <NativeSelectField
                                                 name="minute"
-                                                items={['00', '15', '30', '45']}
+                                                items={['00']}
                                                 value={formData.time.split(':')[1]}
                                                 onChange={handleMinuteChange}
                                                 backgroundColor="gray.100"
